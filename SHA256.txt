@@ -1,1 +1,2 @@
-MemStatistics.exe (compiled with TurboDelphi2006)   1f80f49c92ae2cb1b4c3784188a23a03474fb10615d35cd6b7263ce3669d613e
+MemStatistics.exe     (compiled with TurboDelphi2006)   3346a60811f5a0b8da4fa56e3a7741d378b64d1268b7c01d6c92f878edcddc92
+FP\MemStatistics.exe  (compiled with CodeTyphon7.9)     5b62782ee286f598e11b8135b8d4b34063f5e627cd77235fdf7fa53552307e05
