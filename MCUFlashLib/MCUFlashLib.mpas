@@ -1,0 +1,144 @@
+{
+    Copyright (C) 2023 VCC
+    creation date: 10 Sep 2023
+    initial release date: 23 Sep 2023
+
+    author: VCC
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"),
+    to deal in the Software without restriction, including without limitation
+    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+    OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}
+
+
+unit MCUFlashLib;
+
+procedure ReportFlashInfo;
+
+{$IFDEF P32}
+  procedure Flash_Write_Word(Address, WData: DWord);
+  procedure Flash_Write_Row(Address: DWord; RData: ^Byte);
+  procedure Flash_Erase_Page(Address: DWord);
+{$ENDIF}
+
+{$IFDEF P24} {$DEFINE P24_30_33} {$ENDIF}
+{$IFDEF P30} {$DEFINE P24_30_33} {$ENDIF}
+{$IFDEF P33} {$DEFINE P24_30_33} {$ENDIF}
+
+{$IFDEF P24_30_33}
+{$ENDIF}
+
+{$IFDEF P30}
+{$ENDIF}
+
+{$IFDEF P33}
+{$ENDIF}
+
+{$IFDEF P24}
+{$ENDIF}
+
+{$IFDEF P24_30_33}
+{$ENDIF}
+
+
+implementation
+
+type
+  PByte = ^Byte;
+
+const
+  CRLF = #13 + #10;
+  
+procedure SendDeviceInfoItem(var AItemName: string; AItemValue: DWord);
+var
+  TempStr: string[8];
+begin
+  LongWordToHex(AItemValue, TempStr);
+  UART_Write_Text(AItemName);
+  UART_Write_Text(TempStr);
+  UART_Write_Text(CRLF);
+end;
+
+
+procedure ReportFlashInfo;
+begin
+  SendDeviceInfoItem('Reset_Communication=', $12345678);
+  SendDeviceInfoItem('Pointer_Size=', DWord(SizeOf(PByte)));
+  SendDeviceInfoItem('ProgramFlash_Size=', __FLASH_SIZE);
+  SendDeviceInfoItem('BootFlash_Size=', __BOOT_FLASH_SIZE);
+  SendDeviceInfoItem('Write_Size=', _FLASH_WRITE_LATCH);
+  SendDeviceInfoItem('Erase_Size=', _FLASH_ERASE);
+end;
+
+
+//This library uses UART to send commands to PC
+
+{$IFDEF P32}
+  procedure Flash_Write_Word(Address, WData: DWord);
+  var
+    AddressStr, WDataStr: string[8];
+  begin
+    LongWordToHex(Address, AddressStr);
+    LongWordToHex(WData, WDataStr);
+    
+    UART_Write_Text('Write_Word=');
+    UART_Write_Text(AddressStr);
+    UART_Write_Text(WDataStr);
+    UART_Write_Text(CRLF);
+    
+    //Data example:  'Write_Word=1FC01000FF887733'CRLF
+  end;
+
+
+  procedure Flash_Write_Row(Address: DWord; RData: ^Byte);
+  var
+    AddressStr, WDataStr: string[8];
+    i, n: DWord;
+    WData: DWord;
+  begin
+    LongWordToHex(Address, AddressStr);
+
+    UART_Write_Text('Write_Row=');
+    UART_Write_Text(AddressStr);
+    
+    n := _FLASH_WRITE_LATCH shr 2 - 1;
+    
+    for i := 0 to n do
+    begin
+      memcpy(@WData, RData + i shl 2, 4);  //dest, src, size
+      LongWordToHex(WData, WDataStr);
+      UART_Write_Text(WDataStr);
+    end;
+        
+    UART_Write_Text(CRLF);
+    
+    //Data example:  'Write_Row=1FC01000FF887733DD442299ABCDEF01<..>FF887733'CRLF
+  end;
+
+
+  procedure Flash_Erase_Page(Address: DWord);
+  var
+    AddressStr: string[8];
+  begin
+    LongWordToHex(Address, AddressStr);
+
+    UART_Write_Text('Erase=');
+    UART_Write_Text(AddressStr);
+    UART_Write_Text(CRLF);
+    
+    //Data example:  'Erase=1FC01000'CRLF
+  end;
+{$ENDIF}
+
+end.
