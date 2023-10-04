@@ -1,3 +1,3 @@
-MemStatistics.exe        (compiled with TurboDelphi2006)          3346a60811f5a0b8da4fa56e3a7741d378b64d1268b7c01d6c92f878edcddc92
-FP\MemStatistics.exe     (compiled with CodeTyphon8.2 32-bit)     d5925ee3bbfa21b5e4462b2230ccd10f386f965b1ea377e1932295f2b6f0b364
-FP\MemStatistics_64.exe  (compiled with CodeTyphon8.2 64-bit)     6a3ab6ab492a165237de1b9013ed9f765968ed084ea05daa7c43b9b3b8db2184
+MemStatistics.exe        (compiled with TurboDelphi2006)          63284673558bbe187c764dc456f62035af1c0c084efa0c161b3c91946b9e75fa
+FP\MemStatistics.exe     (compiled with CodeTyphon8.2 32-bit)     c58f2b3ffc8aeff3b3b396eafe03841e66bb442befa4ced12da1d56c968fdca2
+FP\MemStatistics_64.exe  (compiled with CodeTyphon8.2 64-bit)     e7fc873bccde8a4542a12d70c76fed31cd5d00a7b2fd8cbf01d4401a67bcd6b5
