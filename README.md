@@ -8,5 +8,3 @@ The Linux version of the app requires libgtk2. It can be installed by (apt examp
 sudo apt-get install libgtk2.0-0
 
 32-bit suffix: ":i386"
-
-(The 64-bit build for Linux (FP\MemStatistics_64), doesn't work properly with COM port.)
